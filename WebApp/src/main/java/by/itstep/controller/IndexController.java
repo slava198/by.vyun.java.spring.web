@@ -30,7 +30,6 @@ public class IndexController {
         return "Hi!!!";
     }
 
-
     @GetMapping("/")
     public String index(@RequestParam(required = false) String error, Model model, HttpSession httpSession) {
 

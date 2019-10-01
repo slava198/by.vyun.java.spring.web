@@ -34,9 +34,9 @@ public class UserController {
     }
 
     @GetMapping("/del")
-    public String del(String login, HttpSession httpSession) {
+    public String del(String login, HttpSession session) {
         userService.delUserByLogin(login);
-        String currentLogin = (String) httpSession.getAttribute("login");
+        String currentLogin = (String) session.getAttribute("login");
         if (login.equals(currentLogin)) {
             return "redirect:/out";
         }
@@ -59,6 +59,16 @@ public class UserController {
         session.removeAttribute("login");
         return "redirect:";
     }
+
+    @GetMapping("/changeLogin")
+    public String changeLogin(HttpSession session) {
+        String currentLogin = (String) session.getAttribute("login");
+        userService.changeLogin(currentLogin, "XXX");
+
+        return "redirect:/out";
+    }
+
+
 
 
 

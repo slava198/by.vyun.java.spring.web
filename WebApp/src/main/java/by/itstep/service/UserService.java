@@ -75,15 +75,15 @@ public class UserService {
         else {
             return null;
         }
-
-
-
     }
 
 
     //TODO
-    public void changeLogin(){
+    public void changeLogin(String currentLogin, String newLogin){
         //add forms to change login and password
+        userRepository.getUserByLogin(currentLogin).setLogin(newLogin);
+        //currentUser.setLogin(newLogin);
+
     }
 
     public void changePassword(){

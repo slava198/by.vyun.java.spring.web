@@ -61,9 +61,14 @@ public class UserController {
     }
 
     @GetMapping("/changeLogin")
-    public String changeLogin(HttpSession session) {
+    public String changeLogin(HttpSession session, RedirectAttributes attributes) {
         String currentLogin = (String) session.getAttribute("login");
-        userService.changeLogin(currentLogin, "XXX");
+        try {
+            userService.changeLogin2(currentLogin, "xxx");
+        } catch (RegistrationException ex) {
+            attributes.addAttribute("error", ex.getMessage());
+            //e.printStackTrace();
+        }
 
         return "redirect:/out";
     }

@@ -79,9 +79,29 @@ public class UserService {
 
 
     //TODO
-    public void changeLogin(String currentLogin, String newLogin){
+    public void changeLogin1(String currentLogin, String newLogin){
         //add forms to change login and password
+
         userRepository.getUserByLogin(currentLogin).setLogin(newLogin);
+        //currentUser.setLogin(newLogin);
+
+    }
+
+
+    public void changeLogin2(String currentLogin, String newLogin) throws RegistrationException {
+        //add forms to change login and password
+        //User currentUser = userRepository.getUserByLogin(currentLogin);
+        //String password  = currentUser.getPassword();
+
+        userRepository.delUserByLogin(currentLogin);
+
+        UserDto userDto = new UserDto();
+        userDto.setLogin(newLogin);
+        userDto.setPassword(userRepository.getUserByLogin(currentLogin).getPassword());
+
+        registration(userDto);
+
+
         //currentUser.setLogin(newLogin);
 
     }

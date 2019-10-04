@@ -11,7 +11,6 @@
 <div th:if="${error!=null}" style="text-align: center">
     <span style="background-color: lightpink" th:text="${error}"></span>
 
-
 </div>
 
 
@@ -51,25 +50,26 @@
         <br>
 
         <a href="/out">Logout</a>
-        <a href="/changeLogin">Change login</a>
+
+        <form action="/changeLogin" method="post">
+            <div>
+                Login:<input name="login">
+            </div>
+
+
+            <div>
+                <input type="submit" value="Change login">
+            </div>
+        </form>
+
+
+        <!-a href="/changeLogin">Change login>
         <a href="/changePassword">Change password</a>
-
-
-
 
 
     </div>
 
-
 </div>
-
-
-
-
-
-
-
-
 
 
 <table>

@@ -33,5 +33,17 @@ public class RAMUserRepo implements UserRepository {
     @Override
     public void delUserByLogin(String login) {
         users.remove(login);
+
+
+    }
+
+    @Override
+    public void changeLogin(User currentUser, String newLogin) {
+        String oldLogin = currentUser.getLogin();
+        currentUser.setLogin(newLogin);
+        saveUser(currentUser);
+        delUserByLogin(oldLogin);
+        //getUserByLogin(currentLogin).setLogin(newLogin);
+
     }
 }

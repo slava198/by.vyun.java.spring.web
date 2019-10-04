@@ -79,10 +79,12 @@ public class UserService {
 
 
     //TODO
-    public void changeLogin1(String currentLogin, String newLogin){
+    public void changeLogin(String currentLogin, String newLogin) throws RegistrationException {
         //add forms to change login and password
-
-        userRepository.getUserByLogin(currentLogin).setLogin(newLogin);
+        if (userRepository.getUserByLogin(newLogin) != null) {
+            throw new RegistrationException("Login duplicate:" + newLogin);
+        }
+        userRepository.changeLogin(userRepository.getUserByLogin(currentLogin), newLogin);
         //currentUser.setLogin(newLogin);
 
     }
@@ -93,11 +95,13 @@ public class UserService {
         //User currentUser = userRepository.getUserByLogin(currentLogin);
         //String password  = currentUser.getPassword();
 
-        userRepository.delUserByLogin(currentLogin);
+
 
         UserDto userDto = new UserDto();
         userDto.setLogin(newLogin);
         userDto.setPassword(userRepository.getUserByLogin(currentLogin).getPassword());
+
+        userRepository.delUserByLogin(currentLogin);
 
         registration(userDto);
 

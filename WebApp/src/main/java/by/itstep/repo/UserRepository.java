@@ -20,4 +20,6 @@ public interface UserRepository {
 
     void delUserByLogin(String login);
 
+    void changeLogin(User currentUser, String newLogin);
+
 }

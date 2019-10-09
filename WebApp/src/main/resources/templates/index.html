@@ -4,12 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello</title>
+
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous">
+
+    </script>
+
 </head>
 
 <body>
 
 <div th:if="${error!=null}" style="text-align: center">
     <span style="background-color: lightpink" th:text="${error}"></span>
+
 
 </div>
 
@@ -50,26 +59,18 @@
         <br>
 
         <a href="/out">Logout</a>
-
-        <form action="/changeLogin" method="post">
-            <div>
-                Login:<input name="login">
-            </div>
-
-
-            <div>
-                <input type="submit" value="Change login">
-            </div>
-        </form>
-
-
-        <!-a href="/changeLogin">Change login>
-        <a href="/changePassword">Change password</a>
-
-
     </div>
 
+
 </div>
+
+
+
+
+
+
+
+
 
 
 <table>

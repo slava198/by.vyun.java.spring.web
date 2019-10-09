@@ -33,25 +33,10 @@ public class UserController {
 
     }
 
-    @PostMapping("/changeLogin")
-    public String changeLogin(HttpSession session, RedirectAttributes attributes) {
-        String currentLogin = (String) session.getAttribute("login");
-
-        try {
-            userService.changeLogin(currentLogin, "xxx");
-        } catch (RegistrationException ex) {
-            attributes.addAttribute("error", ex.getMessage());
-            //e.printStackTrace();
-        }
-        return "redirect:/out";
-    }
-
-
-
     @GetMapping("/del")
-    public String del(String login, HttpSession session) {
+    public String del(String login, HttpSession httpSession) {
         userService.delUserByLogin(login);
-        String currentLogin = (String) session.getAttribute("login");
+        String currentLogin = (String) httpSession.getAttribute("login");
         if (login.equals(currentLogin)) {
             return "redirect:/out";
         }
@@ -74,10 +59,6 @@ public class UserController {
         session.removeAttribute("login");
         return "redirect:";
     }
-
-
-
-
 
 
 

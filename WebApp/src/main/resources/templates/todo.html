@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo list</title>
+
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous">
+    </script>
+
+    <script>
+        $(function () {
+
+            $.ajax({
+                url: 'todo/getAll',
+                success: function (data) {
+                    console.log(data);
+                    let container = $('#todoList');
+                    $.each(data, function (key, value) {
+                        container.append('<div><b>' + value.title + '</b>:<div>' + value.description + '<br></div></div>');
+                    })
+
+                }
+            });
+
+            $("#saveBtn").click(function (event) {
+                event.preventDefault();
+
+                let title = $('#itemTitle').val();
+                let description = $('#itemDescription').val();
+                console.log(title + ' ' + description);
+                let container = $('#todoList');
+                container.append('<div><b>' + title + '</b>:<div>' + description + '<br></div></div>');
+
+                let newTodoItem = new Object();
+                newTodoItem.title = title;
+                newTodoItem.description = description;
+
+                $.ajax({
+                    url: '/todo/save',
+                    data: newTodoItem,
+                    type: "POST",
+                    error: function (a) {
+                        console.log(a);
+                    }
+
+                });
+
+
+            });
+        });
+
+
+    </script>
+
+</head>
+<body>
+
+<form>
+    <p>
+        <input id="itemTitle">
+    </p>
+    <p>
+        <input id="itemDescription">
+    </p>
+    <button id="saveBtn">Save</button>
+
+
+</form>
+
+<div id="todoList">
+
+
+</div>
+</body>
+</html>

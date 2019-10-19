@@ -8,3 +8,31 @@
 <h1>WELCOME</h1>
 </body>
 </html>
+
+
+
+
+$("#saveBtn").click(function (event) {
+event.preventDefault();
+
+let title = $('#itemTitle').val();
+let description = $('#itemDescription').val();
+console.log(title + ' ' + description);
+let container = $('#todoList');
+container.append('<div><b>' + title + '</b>:<div>' + description + '<br></div></div>');
+
+let newTodoItem = new Object();
+newTodoItem.title = title;
+newTodoItem.description = description;
+
+$.ajax({
+url: '/todo/save',
+data: newTodoItem,
+type: "POST",
+error: function (a) {
+console.log(a);
+}
+
+});
+
+});

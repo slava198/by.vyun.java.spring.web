@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo list</title>
+
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous">
+    </script>
+
+    <script>
+
+        function updateTodoItem(item) {
+            let itemElement = $("#item" + item.id);
+            itemElement.find('.title').text(item.title);
+            itemElement.find('.description').text(item.description);
+        }
+
+
+        function addTodoItem(item) {
+            let todoList = $('#todoList');
+
+            let title = $("<b class='title'></b>").text(item.title);
+            let delBtn = $("<a href='#' class='deleteLink'></a>").text(' delete').attr({id:item.id});
+            let editBtn = $("<a href='#' class='editLink'></a>").text(' edit').attr({editID:item.id});
+            let description = $("<div class='description'></div>").text(item.description);
+
+            let todoItem = $("<div></div>").attr({id: 'item' + item.id});
+            todoItem.append(title, delBtn, editBtn, description);
+            todoList.append(todoItem);
+        }
+
+
+
+        $(function () {
+            $.ajax({
+                url: 'todo/getAll',
+                success: function (data) {
+                    $.each(data, function (key, value) {
+                        addTodoItem(value);
+                    });
+                }
+            });
+
+
+            $("#todoList").on('click', '.deleteLink', function(clickEvent) {
+                console.log(clickEvent.currentTarget.id);
+                let idToDelete = clickEvent.currentTarget.id;
+                $.ajax({
+                    url: '/todo/delete',
+                    data: {id: idToDelete},
+                    type: "POST",
+                    success: function (data){
+                        console.log(data);
+                        $('#item' + idToDelete).remove();
+                    }
+                });
+            });
+
+
+
+            $("#todoList").on('click', '.editLink', function(clickEvent) {
+
+                let itemID = $(clickEvent.currentTarget).attr('editID');
+                let itemToEdit = $("#item" + itemID);
+
+                let title =itemToEdit.find('.title').text();
+                let description = itemToEdit.find('.description').text();
+
+                $("#itemTitle").val(title);
+                $("#itemDescription").val(description);
+
+
+            });
+
+            $("#cancelBtn").click(function () {
+
+                event.preventDefault();
+                $('#itemID').val('');
+                $('#itemTitle').val('');
+                $('#itemDescription').val('');
+            });
+
+
+
+            $("#saveBtn").click(function (event) {
+
+                event.preventDefault();
+                let id = $('#itemID').val();
+                let title = $('#itemTitle').val();
+                let description = $('#itemDescription').val();
+
+                console.log("SAVE: " + id + " - " + title + " - " + description);
+
+                let newTodoItem = new Object();
+                newTodoItem.title = title;
+                newTodoItem.description = description;
+                newTodoItem.id = id;
+
+                $.ajax({
+                    url: '/todo/save',
+                    data: newTodoItem,
+                    type: "POST",
+                    success: function (data) {
+                        newTodoItem.id = data;
+                        if (id.length == 0){
+                            addTodoItem(newTodoItem);
+                        }
+                        else {
+                            updateTodoItem(newTodoItem);
+                        }
+                        $('#itemID').val('');
+                        $('#itemTitle').val('');
+                        $('#itemDescription').val('');
+
+
+
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+
+                });
+
+            });
+
+
+
+
+
+
+
+
+            $("#delBtn").click(function (event) {
+                event.preventDefault();
+                let todoItemID = $('#itemID').val();
+                console.log('Delete: #[' + todoItemID + ']');
+                let objectID = new Object();
+                objectID.todoItemID = todoItemID;
+                console.log('ObjectID: ' + objectID.todoItemID);
+                $.ajax({
+                    url: '/todo/delByID',
+                    data: objectID,
+                    type: "POST",
+                    error: function (a) {
+                        console.log(a);
+                    }
+
+                });
+            });
+
+
+        });
+
+    </script>
+
+
+</head>
+<body>
+
+<form>
+    <p>
+        <input id="itemTitle">
+    </p>
+    <p>
+        <input id="itemDescription">
+    </p>
+    <input type="hidden" id="itemID">
+    <button id="saveBtn">Save</button>
+    <button id="cancelBtn">Cancel</button>
+
+
+</form>
+
+<div id="todoList">
+
+</div>
+
+
+
+
+</body>
+</html>

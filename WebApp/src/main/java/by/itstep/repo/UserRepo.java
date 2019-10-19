@@ -10,7 +10,7 @@ import by.itstep.model.User;
 
 import java.util.List;
 
-public interface UserRepository {
+public interface UserRepo {
 
     User saveUser(User user);
 

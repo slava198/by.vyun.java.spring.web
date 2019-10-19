@@ -7,7 +7,7 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 
 
-@Repository
+//@Repository
 public class RAMTodoRepo implements TodoRepo {
 
     Map<Integer, ToDoItem> itemsMap = new HashMap<>();

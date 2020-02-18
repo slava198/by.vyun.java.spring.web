@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 
 @Component
-public class RAMUserRepo implements UserRepository {
+public class RAMUserRepo implements UserRepo {
 
     Map<String, User> users = new HashMap<>();
 
@@ -33,17 +33,5 @@ public class RAMUserRepo implements UserRepository {
     @Override
     public void delUserByLogin(String login) {
         users.remove(login);
-
-
-    }
-
-    @Override
-    public void changeLogin(User currentUser, String newLogin) {
-        String oldLogin = currentUser.getLogin();
-        currentUser.setLogin(newLogin);
-        saveUser(currentUser);
-        delUserByLogin(oldLogin);
-        //getUserByLogin(currentLogin).setLogin(newLogin);
-
     }
 }

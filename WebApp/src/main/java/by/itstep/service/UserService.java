@@ -3,9 +3,10 @@ package by.itstep.service;
 import by.itstep.model.RegistrationException;
 import by.itstep.model.User;
 import by.itstep.model.dto.UserDto;
-import by.itstep.repo.UserRepository;
+import by.itstep.repo.UserRepo;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -14,15 +15,15 @@ import java.util.List;
 @Service
 public class UserService {
 
-    UserRepository userRepository;
+    UserRepo userRepo;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserRepo userRepo) {
+        this.userRepo = userRepo;
     }
 
     public User registration(UserDto registration) throws RegistrationException {
 
-        if (userRepository.getUserByLogin(registration.getLogin()) != null) {
+        if (userRepo.getUserByLogin(registration.getLogin()) != null) {
             throw new RegistrationException("Login duplicate:" + registration.getLogin());
         }
 
@@ -37,7 +38,7 @@ public class UserService {
         System.out.println(user.getLogin());
         System.out.println(user.getPassword());
 
-        return userRepository.saveUser(user);
+        return userRepo.saveUser(user);
     }
 
     private String getStringHash(String str) {
@@ -54,16 +55,16 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return userRepository.getAllUsers();
+        return userRepo.getAllUsers();
     }
 
     public void delUserByLogin(String login) {
-        userRepository.delUserByLogin(login);
+        userRepo.delUserByLogin(login);
     }
 
     public User auth(UserDto userDto){
 
-        User user = userRepository.getUserByLogin(userDto.getLogin());
+        User user = userRepo.getUserByLogin(userDto.getLogin());
         String password = getStringHash(userDto.getPassword());
         if (user == null) {
             return null;
@@ -75,39 +76,22 @@ public class UserService {
         else {
             return null;
         }
+
+
+
     }
 
+    @PostConstruct
+    void postConstruct() {
+        User user = new User();
+        user.setLogin("1");
+        user.setPassword(getStringHash("1"));
+        userRepo.saveUser(user);
+    }
 
     //TODO
-    public void changeLogin(String currentLogin, String newLogin) throws RegistrationException {
+    public void changeLogin(){
         //add forms to change login and password
-        if (userRepository.getUserByLogin(newLogin) != null) {
-            throw new RegistrationException("Login duplicate:" + newLogin);
-        }
-        userRepository.changeLogin(userRepository.getUserByLogin(currentLogin), newLogin);
-        //currentUser.setLogin(newLogin);
-
-    }
-
-
-    public void changeLogin2(String currentLogin, String newLogin) throws RegistrationException {
-        //add forms to change login and password
-        //User currentUser = userRepository.getUserByLogin(currentLogin);
-        //String password  = currentUser.getPassword();
-
-
-
-        UserDto userDto = new UserDto();
-        userDto.setLogin(newLogin);
-        userDto.setPassword(userRepository.getUserByLogin(currentLogin).getPassword());
-
-        userRepository.delUserByLogin(currentLogin);
-
-        registration(userDto);
-
-
-        //currentUser.setLogin(newLogin);
-
     }
 
     public void changePassword(){

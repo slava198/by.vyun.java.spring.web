@@ -30,6 +30,7 @@ public class IndexController {
         return "Hi!!!";
     }
 
+
     @GetMapping("/")
     public String index(@RequestParam(required = false) String error, Model model, HttpSession httpSession) {
 
@@ -37,6 +38,7 @@ public class IndexController {
         if (login != null) {
             model.addAttribute("login", login);
             model.addAttribute("users", userService.getAllUsers());
+            return "todo";
         }
 
         if (error != null) {
